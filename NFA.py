@@ -1,5 +1,5 @@
 def NFA(cuvant,stare):
-    global D,Drumuri
+    global D,Drumuri,k
     if cuvant=="" and stare in final:
         Drumuri.append(D)
         Drumuri[len(Drumuri)-1].append("acceptat")
@@ -10,8 +10,12 @@ def NFA(cuvant,stare):
             if x[1]==cuvant[:1] and x[0]==stare:
                 for j in x[2]:
                     D.append(j)
+                    k+=1
                     NFA(cuvant[1:],j)
                     D=D[:-1]
+                    k-=1
+                    if k!=0:
+                        D=D[:-k]
 f=open("input.txt")
 M=[line.split() for line in f.readlines()]
 N=[[M[0][0],M[0][1],[M[0][2]]]]
@@ -40,6 +44,7 @@ for x in N:
         D=[x[0]]
         for j in x[2]:
             D.append(j)
+            k=0
             NFA(cuvant[1:],j)
             D=[x[0]]
 for d in Drumuri:
